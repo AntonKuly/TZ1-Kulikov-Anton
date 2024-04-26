@@ -1,0 +1,26 @@
+#!/bin/bash
+#This is a comment
+
+input_dir=$1
+output_dir=$2
+index=1
+
+function cp_dir {
+	cur_dir=$1
+	tar_dir=$2
+	for file in $cur_dir/*
+	do
+		if [[ -d "$file" ]]
+		then
+			cp_dir $file $tar_dir
+		elif [[ -f "$file" ]]
+		then 
+			filename=$(basename "$file")
+    			extension="${filename##*.}"
+   			new_filename="${filename%.*}_$index.$extension"
+    			cp "$file" "$output_dir/$new_filename"
+    			index=$((index+1))
+		fi 
+	done
+}
+cp_dir $input_dir $output_dir 
